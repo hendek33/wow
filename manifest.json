@@ -1,0 +1,18 @@
+{
+  "manifest_version": 3,
+  "name": "Emoji Yağmuru",
+  "version": "1.0",
+  "description": "Tüm sitelerde emoji yağmuru başlatır!",
+  "permissions": ["scripting"],
+  "host_permissions": ["<all_urls>"],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["emoji-rain.js"],
+      "run_at": "document_end"
+    }
+  ]
+}
