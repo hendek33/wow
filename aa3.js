@@ -358,7 +358,7 @@
         }
       </style>
       <div class="popup-overlay">
-        <div class="popup-content">Lütfen Giriş Yapın!</div>
+        <div class="popup-content"><span style="font-weight: bold;">Lütfen Giriş Yapın!</span></div>
       </div>
     `;
     document.body.appendChild(popup);
