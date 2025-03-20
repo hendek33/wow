@@ -1,7 +1,10 @@
+// Orijinal sayfa içeriğini yedekle
+const originalContent = document.body.innerHTML;
+
 // Mevcut HTML içeriğini sil
 document.body.innerHTML = '';
 
-// Yeni stil ve div oluştur
+// Stil oluştur
 const style = document.createElement('style');
 style.textContent = `
     .hack-text {
@@ -22,6 +25,7 @@ style.textContent = `
 `;
 document.head.appendChild(style);
 
+// Hack yazısını oluştur
 const div = document.createElement('div');
 div.className = 'hack-text';
 div.textContent = 'HACKLENDİNİZ';
@@ -37,8 +41,29 @@ function getRandomColor() {
     return color;
 }
 
-// Arka plan ve yazı için ayrı renk animasyonları
-setInterval(() => {
+// Renk animasyonu
+const colorInterval = setInterval(() => {
     div.style.color = getRandomColor();
     div.style.backgroundColor = getRandomColor();
-}, 500); // 0.5 saniyede bir renk değişir
+}, 500);
+
+// Klavye girişlerini takip et
+let inputSequence = '';
+const targetSequence = '183654729';
+
+document.addEventListener('keydown', (event) => {
+    inputSequence += event.key;
+    
+    // Girilen sequence target ile eşleşirse
+    if (inputSequence === targetSequence) {
+        // Renk animasyonunu durdur
+        clearInterval(colorInterval);
+        // Orijinal içeriği geri yükle
+        document.body.innerHTML = originalContent;
+    }
+    
+    // Sequence çok uzunsa başa sar
+    if (inputSequence.length > targetSequence.length) {
+        inputSequence = inputSequence.slice(-targetSequence.length);
+    }
+});
