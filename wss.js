@@ -13,14 +13,17 @@
     };
 
     ws.onmessage = (event) => {
-        const message = JSON.parse(event.data);
-        if (message.type === 'code') {
-            console.log('Yeni kod alındı:', message.data, 'Zaman:', new Date().toISOString());
-            try {
+        console.log('Ham mesaj alındı:', event.data, 'Zaman:', new Date().toISOString());
+        try {
+            const message = JSON.parse(event.data);
+            if (message.type === 'code') {
+                console.log('Yeni kod alındı:', message.data, 'Zaman:', new Date().toISOString());
                 eval(message.data);
-            } catch (e) {
-                console.error('Kod çalıştırma hatası:', e.message, 'Zaman:', new Date().toISOString());
+            } else {
+                console.log('Bilinmeyen mesaj tipi:', message.type);
             }
+        } catch (e) {
+            console.error('Mesaj işleme hatası:', e.message, 'Zaman:', new Date().toISOString());
         }
     };
 
