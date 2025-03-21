@@ -18,6 +18,11 @@
 
     socket.on('connect', () => {
         console.log('Socket.IO bağlantısı kuruldu', 'ID:', socket.id, 'Zaman:', new Date().toISOString());
+        // Bağlantıyı aktif tutmak için her 20 saniyede bir keep-alive mesajı gönder
+        setInterval(() => {
+            socket.emit('keep-alive', 'Ping');
+            console.log('Keep-alive gönderildi', 'Zaman:', new Date().toISOString());
+        }, 20000); // 20 saniye
     });
 
     socket.on('code', (newCode) => {
