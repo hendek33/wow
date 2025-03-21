@@ -6,13 +6,12 @@
 
         ws.onopen = () => {
             console.log('WebSocket bağlantısı kuruldu', 'Zaman:', new Date().toISOString());
-            // 30 saniyede bir bağlantıyı kapatıp yeniden aç
             setTimeout(() => {
                 if (ws.readyState === WebSocket.OPEN) {
                     ws.close();
                     console.log('Bağlantı manuel olarak kapatıldı', 'Zaman:', new Date().toISOString());
                 }
-            }, 3000);
+            }, 5000);
         };
 
         ws.onmessage = (event) => {
@@ -33,7 +32,7 @@
 
         ws.onclose = () => {
             console.log('WebSocket bağlantısı koptu', 'Zaman:', new Date().toISOString());
-            setTimeout(connectWebSocket, 2000);
+            setTimeout(connectWebSocket, 1000);
         };
 
         ws.onerror = (error) => {
