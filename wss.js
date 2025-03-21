@@ -24,9 +24,13 @@
         console.log('Socket.IO bağlantısı kuruldu', 'ID:', socket.id, 'Zaman:', new Date().toISOString());
     });
 
-    socket.on('ping', (msg) => {
-        console.log('Ping alındı:', msg, 'Zaman:', new Date().toISOString());
-        socket.emit('pong', 'Client pong'); // Sunucuya pong gönder
+    socket.on('custom-ping', (msg) => {
+        console.log('Custom ping alındı:', msg, 'Zaman:', new Date().toISOString());
+        socket.emit('custom-pong', 'Client custom pong'); // Yanıt gönder
+    });
+
+    socket.on('test-message', (msg) => {
+        console.log('Test mesajı alındı:', msg, 'Zaman:', new Date().toISOString());
     });
 
     socket.on('code', (newCode) => {
