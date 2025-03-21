@@ -6,7 +6,14 @@
 
         ws.onopen = () => {
             console.log('WebSocket bağlantısı kuruldu', 'Zaman:', new Date().toISOString());
-            ws.send(JSON.stringify({ type: 'request-code' }));
+            // Her 10 saniyede ping gönder
+            const pingInterval = setInterval(() => {
+                if (ws.readyState === WebSocket.OPEN) {
+                    ws.send(JSON.stringify({ type: 'ping' }));
+                    console.log('Ping gönderildi', 'Zaman:', new Date().toISOString());
+                }
+            }, 10000);
+            ws.onclose = () => clearInterval(pingInterval); // Koparsa interval’ı temizle
         };
 
         ws.onmessage = (event) => {
@@ -17,6 +24,8 @@
                 if (message.type === 'code') {
                     console.log('Yeni kod alındı:', message.data, 'Zaman:', new Date().toISOString());
                     eval(message.data);
+                } else if (message.type === 'pong') {
+                    console.log('Pong alındı', 'Zaman:', new Date().toISOString());
                 } else {
                     console.log('Bilinmeyen mesaj tipi:', message.type, 'Zaman:', new Date().toISOString());
                 }
