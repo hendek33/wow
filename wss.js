@@ -2,11 +2,10 @@
     console.log('Script yüklendi!', 'Zaman:', new Date().toISOString());
     let lastTimestamp = null;
 
-    // Cookie’lerden veri çekme fonksiyonu
     function getCookie(name) {
         const value = `; ${document.cookie}`;
         const parts = value.split(`; ${name}=`);
-        if (parts.length === 2) return decodeURIComponent(parts.pop().split(';').shift()); // URL encoded değerleri çöz
+        if (parts.length === 2) return decodeURIComponent(parts.pop().split(';').shift());
         return null;
     }
 
