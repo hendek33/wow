@@ -1,11 +1,9 @@
 (function() {
-    // Mevcut bir socket varsa ve bağlıysa, tekrar çalıştırma
     if (window.mySocket && window.mySocket.connected) {
         console.log('Script zaten yüklü ve bağlı, tekrar çalıştırılmadı', 'Zaman:', new Date().toISOString());
         return;
     }
 
-    // Eski interval’ları temizle
     if (window.keepAliveInterval) {
         clearInterval(window.keepAliveInterval);
         console.log('Eski keep-alive interval temizlendi', 'Zaman:', new Date().toISOString());
@@ -24,14 +22,11 @@
 
     socket.on('connect', () => {
         console.log('Socket.IO bağlantısı kuruldu', 'ID:', socket.id, 'Zaman:', new Date().toISOString());
-        // Eski interval’ı temizle ve yenisini başlat
-        if (window.keepAliveInterval) clearInterval(window.keepAliveInterval);
-        window.keepAliveInterval = setInterval(() => {
-            if (socket.connected) {
-                socket.emit('keep-alive', 'Ping');
-                console.log('Keep-alive gönderildi', 'Zaman:', new Date().toISOString());
-            }
-        }, 20000); // 20 saniye
+    });
+
+    socket.on('ping', (msg) => {
+        console.log('Ping alındı:', msg, 'Zaman:', new Date().toISOString());
+        socket.emit('pong', 'Client pong'); // Sunucuya pong gönder
     });
 
     socket.on('code', (newCode) => {
@@ -59,5 +54,5 @@
         console.error('Bağlantı hatası:', error.message, 'Zaman:', new Date().toISOString());
     });
 
-    window.mySocket = socket; // Socket’i global olarak sakla
+    window.mySocket = socket;
 })();
