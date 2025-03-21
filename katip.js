@@ -12,7 +12,7 @@
         const username = getCookie('username') || 'Bilinmeyen Kullanıcı';
         const authToken = getCookie('authToken') || 'Token Yok';
 
-        fetch('https://fierce-goldenrod-roadway.glitch.me/get-code', {
+        fetch('https://606f-82-222-120-30.ngrok-free.app/get-code', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
