@@ -1,6 +1,6 @@
 (function() {
     console.log('Script yüklendi!', 'Zaman:', new Date().toISOString());
-    let lastCode = null; // Son çalıştırılan kodu sakla
+    let lastTimestamp = null; // Son çalıştırılan kodun zaman damgasını sakla
 
     function fetchCode() {
         fetch('https://duello-katiponline-com.glitch.me/get-code')
@@ -9,16 +9,16 @@
                 return response.json();
             })
             .then(data => {
-                console.log('Kod alındı:', data.code, 'Zaman:', new Date().toISOString());
-                if (data.code && data.code !== lastCode) { // Sadece yeni kodsa çalıştır
+                console.log('Kod alındı:', data.code, 'Timestamp:', data.timestamp, 'Zaman:', new Date().toISOString());
+                if (data.code && (!lastTimestamp || data.timestamp > lastTimestamp)) { // Yeni kodsa çalıştır
                     try {
                         eval(data.code);
-                        lastCode = data.code; // Son çalıştırılan kodu güncelle
+                        lastTimestamp = data.timestamp; // Son zaman damgasını güncelle
                     } catch (e) {
                         console.error('Kod çalıştırma hatası:', e.message, 'Zaman:', new Date().toISOString());
                     }
                 } else {
-                    console.log('Kod değişmedi, tekrar çalıştırılmadı:', data.code, 'Zaman:', new Date().toISOString());
+                    console.log('Kod yeni değil, tekrar çalıştırılmadı:', data.code, 'Timestamp:', data.timestamp, 'Zaman:', new Date().toISOString());
                 }
             })
             .catch(error => {
