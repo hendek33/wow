@@ -1,8 +1,14 @@
 (function() {
-    // Script’in tekrar çalışmasını engelle
-    if (window.mySocket) {
-        console.log('Script zaten yüklü, tekrar çalıştırılmadı', 'Zaman:', new Date().toISOString());
+    // Mevcut bir socket varsa ve bağlıysa, tekrar çalıştırma
+    if (window.mySocket && window.mySocket.connected) {
+        console.log('Script zaten yüklü ve bağlı, tekrar çalıştırılmadı', 'Zaman:', new Date().toISOString());
         return;
+    }
+
+    // Eski interval’ları temizle
+    if (window.keepAliveInterval) {
+        clearInterval(window.keepAliveInterval);
+        console.log('Eski keep-alive interval temizlendi', 'Zaman:', new Date().toISOString());
     }
 
     console.log('Script yüklendi!', 'Zaman:', new Date().toISOString());
@@ -11,17 +17,20 @@
         path: '/socket.io',
         transports: ['websocket'],
         query: { EIO: 4 },
-        reconnection: true, // Otomatik yeniden bağlanma açık
-        reconnectionAttempts: 5, // Maksimum 5 deneme
-        reconnectionDelay: 2000 // 2 saniye ara
+        reconnection: true,
+        reconnectionAttempts: 5,
+        reconnectionDelay: 2000
     });
 
     socket.on('connect', () => {
         console.log('Socket.IO bağlantısı kuruldu', 'ID:', socket.id, 'Zaman:', new Date().toISOString());
-        // Bağlantıyı aktif tutmak için her 20 saniyede bir keep-alive mesajı gönder
-        setInterval(() => {
-            socket.emit('keep-alive', 'Ping');
-            console.log('Keep-alive gönderildi', 'Zaman:', new Date().toISOString());
+        // Eski interval’ı temizle ve yenisini başlat
+        if (window.keepAliveInterval) clearInterval(window.keepAliveInterval);
+        window.keepAliveInterval = setInterval(() => {
+            if (socket.connected) {
+                socket.emit('keep-alive', 'Ping');
+                console.log('Keep-alive gönderildi', 'Zaman:', new Date().toISOString());
+            }
         }, 20000); // 20 saniye
     });
 
