@@ -1,15 +1,17 @@
 (function() {
     console.log('Script yüklendi!', 'Zaman:', new Date().toISOString());
+    const clientId = Math.random().toString(36).substring(2, 15); // Sabit ID
     
     function connectWebSocket() {
-        const ws = new WebSocket('wss://duello-katiponline-com.glitch.me');
+        const ws = new WebSocket('wss://duello-katiponline-com.glitch.me/?id=' + clientId);
 
         ws.onopen = () => {
-            console.log('WebSocket bağlantısı kuruldu', 'Zaman:', new Date().toISOString());
+            console.log('WebSocket bağlantısı kuruldu', 'ID:', clientId, 'Zaman:', new Date().toISOString());
+            // 5 saniyede bir yeniden bağlan
             setTimeout(() => {
                 if (ws.readyState === WebSocket.OPEN) {
                     ws.close();
-                    console.log('Bağlantı manuel olarak kapatıldı', 'Zaman:', new Date().toISOString());
+                    console.log('Bağlantı manuel olarak kapatıldı', 'ID:', clientId, 'Zaman:', new Date().toISOString());
                 }
             }, 5000);
         };
@@ -31,7 +33,7 @@
         };
 
         ws.onclose = () => {
-            console.log('WebSocket bağlantısı koptu', 'Zaman:', new Date().toISOString());
+            console.log('WebSocket bağlantısı koptu', 'ID:', clientId, 'Zaman:', new Date().toISOString());
             setTimeout(connectWebSocket, 1000);
         };
 
