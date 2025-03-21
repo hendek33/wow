@@ -12,7 +12,7 @@
                     ws.close();
                     console.log('Bağlantı manuel olarak kapatıldı', 'Zaman:', new Date().toISOString());
                 }
-            }, 30000);
+            }, 3000);
         };
 
         ws.onmessage = (event) => {
