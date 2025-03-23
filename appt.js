@@ -103,7 +103,7 @@ if (!window.hasOwnProperty('scriptLoaded')) {
                         const planTitle = iframeDoc.querySelector('span.plan-title');
                         if (planTitle) {
                             const originalLink = planTitle.querySelector('a');
-                            planTitle.innerHTML = 'Manipüle Edilmiş Paket ';
+                            planTitle.innerHTML = 'Başlangıç Paketi';
                             if (originalLink) {
                                 planTitle.appendChild(originalLink);
                             }
