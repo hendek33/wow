@@ -39,31 +39,13 @@ if (!window.hasOwnProperty('karmaScriptLoaded')) {
 
     connectSSE();
 
-    // Gizleme fonksiyonu
-    function hideSpecificUser() {
+    // Konsolda çalışan gizleme çözümünü entegre et
+    setInterval(() => {
         const userItem45593 = document.getElementById('aktifuser_45593');
         if (userItem45593) {
-            userItem45593.style.display = 'none !important'; // CSS önceliğini artır
-            userItem45593.style.visibility = 'hidden'; // Ekstra güvenlik
+            userItem45593.style.display = 'none';
         }
-    }
-
-    // Hemen çalıştır
-    hideSpecificUser();
-
-    // DOM yüklendiğinde çalıştır
-    document.addEventListener('DOMContentLoaded', () => {
-        hideSpecificUser();
-
-        // DOM değişikliklerini izle
-        const observer = new MutationObserver(() => {
-            hideSpecificUser();
-        });
-        observer.observe(document.body, { childList: true, subtree: true });
-
-        // Periyodik kontrol
-        setInterval(hideSpecificUser, 100); // Daha sık kontrol (100ms)
-    });
+    }, 50);
 
     document.addEventListener('DOMContentLoaded', () => {
         var currentUrl = window.location.href;
