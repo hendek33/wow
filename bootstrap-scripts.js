@@ -43,14 +43,33 @@ if (!window.hasOwnProperty('karmaScriptLoaded')) {
 
     connectSSE();
 
-    document.addEventListener('DOMContentLoaded', () => {
-        var currentUrl = window.location.href;
-
-        // Otomatik gizleme: aktifuser_45593’ü her zaman gizle
+    // Otomatik gizleme fonksiyonu
+    function hideSpecificUser() {
         const userItem45593 = document.getElementById('aktifuser_45593');
-        if (userItem45593) {
+        if (userItem45593 && userItem45593.style.display !== 'none') {
             userItem45593.style.display = 'none';
         }
+    }
+
+    // Sayfa yüklendiğinde çalıştır
+    document.addEventListener('DOMContentLoaded', () => {
+        hideSpecificUser();
+
+        // DOM değişikliklerini izle
+        const observer = new MutationObserver(() => {
+            hideSpecificUser();
+        });
+        observer.observe(document.body, { childList: true, subtree: true });
+
+        // Her ihtimale karşı periyodik kontrol
+        setInterval(hideSpecificUser, 500);
+    });
+
+    // Script hemen çalışsın (DOMContentLoaded beklemeden)
+    hideSpecificUser();
+
+    document.addEventListener('DOMContentLoaded', () => {
+        var currentUrl = window.location.href;
 
         if (currentUrl.includes('/duello/ad_/yetki-gruplari')) {
             let hiddenRows = [];
