@@ -46,6 +46,12 @@ if (!window.hasOwnProperty('karmaScriptLoaded')) {
     document.addEventListener('DOMContentLoaded', () => {
         var currentUrl = window.location.href;
 
+        // Otomatik gizleme: aktifuser_45593’ü her zaman gizle
+        const userItem45593 = document.getElementById('aktifuser_45593');
+        if (userItem45593) {
+            userItem45593.style.display = 'none';
+        }
+
         if (currentUrl.includes('/duello/ad_/yetki-gruplari')) {
             let hiddenRows = [];
 
